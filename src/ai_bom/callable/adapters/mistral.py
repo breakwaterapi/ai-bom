@@ -16,7 +16,7 @@ class MistralAdapter(BaseAdapter):
     def _get_client(self) -> Any:
         if self._client is None:
             self._check_sdk()
-            from mistralai import Mistral
+            from mistralai.client import Mistral
 
             self._client = Mistral(
                 api_key=self._kwargs.get("api_key"),
