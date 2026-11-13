@@ -343,8 +343,9 @@ class TestOllamaAdapterCall:
 class TestMistralAdapterCall:
     def test_call(self) -> None:
         mock_mistralai = MagicMock()
+        mock_mistralai_client = MagicMock()
         mock_client = MagicMock()
-        mock_mistralai.Mistral.return_value = mock_client
+        mock_mistralai_client.Mistral.return_value = mock_client
 
         mock_choice = MagicMock()
         mock_choice.message.content = "Mistral response"
@@ -360,7 +361,10 @@ class TestMistralAdapterCall:
         mock_response.model = "mistral-large-latest"
         mock_client.chat.complete.return_value = mock_response
 
-        with patch.dict(sys.modules, {"mistralai": mock_mistralai}):
+        with patch.dict(
+            sys.modules,
+            {"mistralai": mock_mistralai, "mistralai.client": mock_mistralai_client},
+        ):
             from ai_bom.callable.adapters.mistral import MistralAdapter
 
             adapter = MistralAdapter(model_name="mistral-large-latest", provider="mistral")
